@@ -23,11 +23,6 @@
         <el-col :span="12"><div class="grid-content bg-purple">看诊时间：</div></el-col>
         <el-col :span="12"><div class="grid-content bg-purple-light">{{bbmc}}</div></el-col>
       </el-row>
-      
-      <!--<el-row style="margin-top: 1em;">
-        <el-col :span="12"><div class="grid-content bg-purple">就诊病人：</div></el-col>
-        <el-col :span="12"><div class="grid-content bg-purple-light">{{userinfo.xm}}</div></el-col>
-      </el-row>-->
       <el-row style="margin-top: 0.5em;">
         <el-col :span="12"><div class="grid-content bg-purple">挂号费用：</div></el-col>
         <el-col :span="12"><div class="grid-content bg-purple-light">￥{{zfje}}</div></el-col>
@@ -79,24 +74,10 @@ export default {
                 if (obj.result == 1) {
                     this.payDialog = false,
                     WSC.result = false
-                    // this.message({
-                    //     message: '挂号成功',
-                    //     type: 'success'
-                    // });
-                    // setTimeout(()=>{
-                    //   this.$router.push({ path: '/register/service' })
-                    // },3000);
                     this.$router.push({ path: '/register/reg-result', query: { status: 1, ksmc: this.ksmc, ysxm: this.ysxm } })
                 } else if (obj.result == 2) {
                   this.payDialog = false,
                   WSC.result = false
-                  // this.message({
-                  //       message: '挂号失败',
-                  //       type: 'error'
-                  // });
-                  // setTimeout(()=>{
-                  //     this.$router.push({ path: '/register/service' })
-                  //   },3000);
                   this.$router.push({ path: '/register/reg-result', query: { status: 0, ksmc: this.ksmc, ysxm: this.ysxm } })
                 }
             },
@@ -113,20 +94,6 @@ export default {
       this.ksmc = this.$route.query.ksmc;
       this.ysxm = this.$route.query.ysxm;
       this.bbmc = this.$route.query.bbmc;
-      // const params = {
-      //     'module': 'Robot',
-      //     'method': 'getUserInfo',
-      // }
-
-      // WSC.websocketsend(params).then(result => {
-      //     if (result.code === 0) {
-      //       this.userinfo = result.data
-      //     } else {
-      //         this.message.error("接口异常，请重试");
-      //     }
-      // }).catch(err => {
-      //     this.message.error(err.message);
-      // });
   },
   mounted: function() {},
   computed: {},
@@ -146,18 +113,14 @@ export default {
         this.payType = zfzl
         this.payDialog = true
         const params = {
-          'module': 'Robot',
-          'method': 'createRegOrder',
-          'arguments': {
             'ysbh': this.ysbh,
             'bb': this.bb,
             'zfje': this.zfje,
             'zfzl':zfzl,
-            'body': 'guahaofei',
-           }
+            'body': 'guahaofei'
         }
         console.log(params);
-        WSC.websocketsend(params).then(result => {
+        WSC.websocketsend(params, 'Register', 'createRegOrder').then(result => {
             if (result.code === 0) {
               this.active = 3
               this.payCode = result.data
@@ -202,7 +165,7 @@ export default {
   background:url(../../../static/img/weixin.png) no-repeat center;
 }
 .zhifubao-info {
-  text-align: center; padding-top: 160px; height: 2em;
+  text-align: center; padding-top: 165px; height: 2em;
   font-size: 1.5em; color: #333;
 }
 .zhifubao-jine {

@@ -61,11 +61,8 @@ export default {
     if (!WSC.token) {
         this.$router.push({ path: '/' })
     } else {
-        const params = {
-            'module': 'Robot',
-            'method': 'getTodayRegister'
-        }
-        WSC.websocketsend(params).then(result => {
+        const params = {}
+        WSC.websocketsend(params, 'Register', 'getTodayRegister').then(result => {
             this.loading= false
             if (result.code === 0 && result.data.length > 0) {
                 this.tableData = result.data
@@ -84,11 +81,9 @@ export default {
       cancelReg: function(mzh) {
         this.disabled = true
         const params = {
-          'module': 'Robot',
-          'method': 'cancelReg',
-          'arguments': {'mzh': mzh}
+          'mzh': mzh
         }
-        WSC.websocketsend(params).then(result => {
+        WSC.websocketsend(params, 'Register', 'cancelReg').then(result => {
             if (result.code === 0) {
                 this.tableData = result.data
                 this.message.success('该挂号已取消，挂号费稍后到账')

@@ -92,12 +92,10 @@ export default {
     this.ksmc = this.$route.query.ksmc;
     this.ksbm = this.$route.query.ksbm;
     const params = {
-          'module': 'Robot',
-          'method': 'getSourceList',
-          'arguments': {'ksbm': this.ksbm}
+          'ksbm': this.ksbm
       }
 
-      WSC.websocketsend(params).then(result => {
+      WSC.websocketsend(params, 'Register', 'getSourceList').then(result => {
           this.loading = false
           if (result.code === 0 && result.data.length > 0) {
             this.tableData = result.data

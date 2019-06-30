@@ -105,8 +105,8 @@ export default {
     padding-left: 2ch;
 }
 .logoer img {
-    height: 81px;
-    width: 375px;
+    height: 100px;
+    width: 469px;
 }
 .counter {
     text-align: center;

@@ -36,11 +36,9 @@ export default {
           this.$router.push({ path: '/' })
       }    
       const params = {
-          'module': 'Robot',
-          'method': 'getUserInfo',
       }
       
-      WSC.websocketsend(params).then(result => {
+      WSC.websocketsend(params, 'Index', 'getUserInfo').then(result => {
           if (result.code === 0) {
             this.userinfo = result.data
           } else {

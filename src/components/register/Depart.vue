@@ -37,12 +37,9 @@ export default {
     },
     created: function () {
       if (WSC.token) {
-        const params = {
-            'module': 'Robot',
-            'method': 'getDepartment'
-        }
+        const params = {}
 
-        WSC.websocketsend(params).then(result => {
+        WSC.websocketsend(params, 'Register', 'getDepartment').then(result => {
             if (result.code === 0 && result.data.length > 0) {
                 this.tableData = result.data
             }

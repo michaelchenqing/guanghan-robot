@@ -47,7 +47,7 @@ export const WSC = {
         this.initParam();
         let timestamp = parseInt(Date.parse(new Date()) / 1000);
         let signTxt = String(cardno) + String(timestamp)
-        this.wsuri = websocket_addr + "?token="+websocket_iv+"&cardno="+cardno+"&timestamp="+timestamp+"&sign=" + this.encrypt(signTxt, websocket_iv)
+        this.wsuri = websocket_addr + "?token="+websocket_iv+"&cardno="+cardno+"&timestamp="+timestamp+"&sign=" + this.encryptMd5(signTxt, websocket_iv)
         this.websock = new WebSocket(this.wsuri) // 这里面的this都指向vue
         this.websock.onopen = this.websocketopen
         this.websock.onsend = this.websocketsend
@@ -110,18 +110,16 @@ export const WSC = {
         }, 1000)
     },
 
-    websocketsend: function (agentData) { // 数据发送
+    websocketsend: function (agentData, module, method) { // 数据发送
         TIMER.clear();
         if (this.token) {
-            const timestamp = parseInt(Date.parse(new Date()) / 1000);
             const requestId = Date.now().toString(36)
-            agentData.timestamp = timestamp
             const data = {
                 requestId: requestId,
                 token:this.token,
-                timestamp : timestamp,
-                data: agentData,
-                sign: this.encrypt(JSON.stringify(agentData), this.token)
+                module: module,
+                method: method,
+                arguments: agentData,
             }
             console.log('发送数据:', data)
             this.websock.send(JSON.stringify(data))
@@ -140,12 +138,10 @@ export const WSC = {
         }
     },
 
-    encrypt: function (str, wiv) {
-        let ivs = wiv.slice(-16);
-        var key = CryptoJS.enc.Utf8.parse(websocket_key);// 秘钥
-        var iv= CryptoJS.enc.Utf8.parse(ivs);//向量iv
-        var encrypted = CryptoJS.AES.encrypt(str, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7});
-        return encrypted.toString();
-    },
+    encryptMd5: function (strs, wiv)  {
+        let plain = websocket_key + strs + wiv;
+        let encrypted = CryptoJS.MD5(plain).toString();
+        return encrypted.slice(8, -8).toUpperCase()
+    }
 
 }

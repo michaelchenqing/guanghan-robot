@@ -50,7 +50,6 @@
         <el-table-column label="支付通道">
           <template slot-scope="scope">
             <template v-if="scope.row.skbs">
-              <!-- <el-button type="danger" @click="refund(scope.row.sjh, scope.row.skbs, scope.row.je)" :disabled="disabled">退款</el-button> -->
               已缴费
             </template>
             <template v-else>
@@ -98,24 +97,10 @@ export default {
                 if (obj.result == 1) {
                     this.payDialog = false,
                     WSC.result = false
-                    // this.message({
-                    //     message: '缴费成功',
-                    //     type: 'success'
-                    // });
-                    // setTimeout(()=>{
-                    //   this.$router.push({ path: '/index' })
-                    // },3000);
                     this.$router.push({ path: '/pay-result', query: { status: 1 } })
                 } else if (obj.result == 2) {
                   this.payDialog = false,
                   WSC.result = false
-                  // this.message({
-                  //       message: '缴费失败',
-                  //       type: 'error'
-                  // });
-                  // setTimeout(()=>{
-                  //     this.$router.push({ path: '/index' })
-                  //   },3000);
                   this.$router.push({ path: '/pay-result', query: { status: 0 } })
                 }
             },
@@ -126,11 +111,8 @@ export default {
     if (!WSC.token) {
         this.$router.push({ path: '/' })
     } else {
-        const params = {
-            'module': 'Robot',
-            'method': 'getPayment'
-        }
-        WSC.websocketsend(params).then(result => {
+        const params = {}
+        WSC.websocketsend(params, 'Payment','getPayment').then(result => {
             this.loading= false
             if (result.code === 0 && result.data.length > 0) {
                 this.tableData = result.data
@@ -142,45 +124,6 @@ export default {
     }
   },
   methods: {
-      refund: function(sjh, skbs, zfje) {
-        if (sjh == null) {
-          this.message.warn('非终端机缴费，请到柜台退款');
-        } else {
-          this.disabled = true
-          this.$confirm('选择退款, 是否继续?', '', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            const params = {
-              'module': 'Robot',
-              'method': 'cancelPay',
-              'arguments': {'sjh': sjh, 'skbs': skbs, 'zfje': zfje}
-            }
-            WSC.websocketsend(params).then(result => {
-                if (result.code === 0) {
-                    this.message.success('该缴费已取消，退款稍后到账')
-                    setTimeout(()=>{
-                        this.disabled = false
-                        this.$router.push({ path: '/index'})
-                    },3000);
-                } else {
-                    this.disabled = false
-                    this.message.error('操作失败，请重试')
-                }
-            }).catch(err => {
-                this.disabled = false
-                this.message.error(err.message);
-            });
-          }).catch(() => {
-            this.disabled = false
-            this.$message({
-              type: 'info',
-              message: '已取消退款'
-            });          
-          });
-        }
-      },
       handleClose(done) {
         this.$confirm('如果已经支付请等待系统通知...')
           .then(_ => {
@@ -194,15 +137,11 @@ export default {
         this.payType = zfzl
         this.money = zfje
         const params = {
-          'module': 'Robot',
-          'method': 'createPayOrder',
-          'arguments': {
-            'mzh': mzh,
-            'zfje': zfje,
-            'zfzl': zfzl,
-           }
+          'mzh': mzh,
+          'zfje': zfje,
+          'zfzl': zfzl,
         }
-        WSC.websocketsend(params).then(result => {
+        WSC.websocketsend(params, 'Payment', 'createPayOrder').then(result => {
             if (result.code === 0) {
               this.payCode = result.data
             } else {

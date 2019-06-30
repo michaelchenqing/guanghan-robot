@@ -13,7 +13,7 @@ export default {
   data () {
     return {
       codeImg: '',
-      msg: '欢迎关注成都北新医院微信公众号'
+      msg: '欢迎关注广汉市骨科医院微信公众号'
     }
   }, 
   created: function() {
