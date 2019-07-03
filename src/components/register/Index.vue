@@ -29,13 +29,6 @@
                 prop="hj"
                 label="挂号费">
                 </el-table-column>
-                <!-- <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button
-                        type="danger"
-                        @click="cancelReg(scope.row.mzh)" :disabled="disabled">取消挂号</el-button>
-                    </template>
-                </el-table-column> -->
             </el-table>
             </template>
         </div>
@@ -78,27 +71,6 @@ export default {
   mounted: function() {},
   computed: {},
   methods: {
-      cancelReg: function(mzh) {
-        this.disabled = true
-        const params = {
-          'mzh': mzh
-        }
-        WSC.websocketsend(params, 'Register', 'cancelReg').then(result => {
-            if (result.code === 0) {
-                this.tableData = result.data
-                this.message.success('该挂号已取消，挂号费稍后到账')
-                setTimeout(()=>{
-                    this.disabled = false
-                    this.$router.push({ path: '/index'})
-                },3000);
-            } else {
-                this.disabled = false
-                this.message.error('操作失败，请重试')
-            }
-        }).catch(err => {
-            this.message.error(err.message);
-        });
-      },
       addReg: function() {
         this.$router.push({ path: '/register/depart'})
       }

@@ -92,26 +92,26 @@ export default {
     }
   },
   watch: {
-        WSC:{
-            handler:function(obj) {
-                if (obj.result == 1) {
-                    this.payDialog = false,
-                    WSC.result = false
-                    this.$router.push({ path: '/pay-result', query: { status: 1 } })
-                } else if (obj.result == 2) {
-                  this.payDialog = false,
-                  WSC.result = false
-                  this.$router.push({ path: '/pay-result', query: { status: 0 } })
-                }
-            },
-            deep:true
-        },
+    WSC:{
+      handler:function(obj) {
+        if (obj.result == 1) {
+          this.payDialog = false,
+          WSC.result = false
+          this.$router.push({ path: '/pay-result', query: { status: 1 }})
+        } else if (obj.result == 2) {
+          this.payDialog = false,
+          WSC.result = false
+          this.$router.push({ path: '/pay-result', query: { status: 0 }})
+        }
+      },
+      deep:true
     },
+  },
   created: function () {
     if (!WSC.token) {
-        this.$router.push({ path: '/' })
+      this.$router.push({ path: '/' })
     } else {
-        const params = {}
+      const params = {}
         WSC.websocketsend(params, 'Payment','getPayment').then(result => {
             this.loading= false
             if (result.code === 0 && result.data.length > 0) {
@@ -124,33 +124,33 @@ export default {
     }
   },
   methods: {
-      handleClose(done) {
-        this.$confirm('如果已经支付请等待系统通知...')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-      },
-      payment(mzh, zfje, zfzl) {
-        this.payCode = ''
-        this.payDialog = true
-        this.payType = zfzl
-        this.money = zfje
-        const params = {
-          'mzh': mzh,
-          'zfje': zfje,
-          'zfzl': zfzl,
+    handleClose(done) {
+      this.$confirm('如果已经支付请等待系统通知...')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+    },
+    payment(mzh, zfje, zfzl) {
+      this.payCode = ''
+      this.payDialog = true
+      this.payType = zfzl
+      this.money = zfje
+      const params = {
+        'mzh': mzh,
+        'zfje': zfje,
+        'zfzl': zfzl,
+      }
+      WSC.websocketsend(params, 'Payment', 'createPayOrder').then(result => {
+        if (result.code === 0) {
+          this.payCode = result.data
+        } else {
+          this.message.error("缴费失败，请重试");
         }
-        WSC.websocketsend(params, 'Payment', 'createPayOrder').then(result => {
-            if (result.code === 0) {
-              this.payCode = result.data
-            } else {
-              this.message.error("缴费失败，请重试");
-            }
-        }).catch(err => {
-            this.message.error(err.message);
-        });
-      },
+      }).catch(err => {
+        this.message.error(err.message);
+      });
+    },
   }
 }
 </script>

@@ -114,10 +114,12 @@ export default {
         this.payDialog = true
         const params = {
             'ysbh': this.ysbh,
+            'ysxm': this.ysxm,
             'bb': this.bb,
+            'bbmc': this.bbmc,
+            'ksmc': this.ksmc,
             'zfje': this.zfje,
-            'zfzl':zfzl,
-            'body': 'guahaofei'
+            'zfzl': zfzl
         }
         console.log(params);
         WSC.websocketsend(params, 'Register', 'createRegOrder').then(result => {

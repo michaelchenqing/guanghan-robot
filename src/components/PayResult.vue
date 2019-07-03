@@ -1,7 +1,7 @@
 <template>
   <div class="pay-result">
-    <h1 v-if="status==1">门诊缴费支付成功</h1>
-    <h1 v-else>门诊缴费支付失败，请重试</h1>
+    <h1 v-if="status==1">门诊缴费支付成功，祝您早日康复！</h1>
+    <h1 v-else>门诊缴费操作失败，请稍后重试！</h1>
   </div>  
 </template>
 <script>
@@ -15,10 +15,10 @@ export default {
     }
   }, 
   created: function () {
-      if (!WSC.token) {
-          this.$router.push({ path: '/' })
-      }
-      this.status = this.$route.query.status;
+    if (!WSC.token) {
+      this.$router.push({ path: '/' })
+    }
+    this.status = this.$route.query.status;
   },
 }
 </script>

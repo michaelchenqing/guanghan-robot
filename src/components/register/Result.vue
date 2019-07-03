@@ -11,7 +11,7 @@
       </el-row>
     </div>
     <h1 v-if="status==1">挂号成功，请到 {{ office }} {{ doctor }} 医生处就诊</h1>
-    <h1 v-else>挂号支付失败，请重试</h1>
+    <h1 v-else>挂号操作失败，请稍后重试！</h1>
   </div>  
 </template>
 <script>
