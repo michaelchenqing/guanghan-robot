@@ -53,8 +53,7 @@
               已缴费
             </template>
             <template v-else>
-              <el-button type="primary" @click="payment(scope.row.mzh, scope.row.je, 1)">支付宝</el-button>
-              <el-button type="success" @click="payment(scope.row.mzh, scope.row.je, 2)">微信</el-button>
+              <el-button type="success" @click="payment(scope.row.mzh, scope.row.je, 3)">扫码付款</el-button>
             </template>
           </template>
         </el-table-column>
@@ -62,13 +61,12 @@
     </template>
     <el-dialog
       width="480px"
-      top="0"
+      top="120px"
       :visible.sync="payDialog"
       :before-close="handleClose">
-      <div v-bind:class="['zhifu' ,payType == 1 ? 'zhifubao' : 'weixin']">
-        <div class="zhifubao-info">扫码后请等待系统通知</div>
+      <div v-bind:class="['zhifu' , 'huizhifu']">
+        <div class="zhifubao-code"><img :src="payCode" width="216" height="216" /></div>
         <div class="zhifubao-jine">门诊缴费：￥{{ money }}</div>
-        <div class="zhifubao-code"><img :src="payCode" width="180" height="180" /></div>
       </div>
     </el-dialog>
   </div>
@@ -175,7 +173,7 @@ export default {
     font-size: 0.5em;
   }
   .zhifu {
-    width:480px; height: 680px;
+    width:480px; height: 576px;
   }
   .zhifubao {
     background:url(../../static/img/zhifubao.png) no-repeat center;
@@ -183,18 +181,17 @@ export default {
   .weixin {
     background:url(../../static/img/weixin.png) no-repeat center;
   }
-  .zhifubao-info {
-    text-align: center; padding-top: 160px; height: 2em;
-    font-size: 1.5em; color: #333;
+  .huizhifu {
+    background:url(../../static/img/WechatIMG22.png) no-repeat center;
   }
   .zhifubao-jine {
-    font-size: 1.5em; color: #FFF;  height: 2em; text-align: center;
-    margin-top: 1em;
+    font-size: 1em; color: #333;  height: 1.5em; 
+    margin-top: 1em; padding-left: 116px;
   }
   .zhifubao-code {
-    width: 180px;
-    height: 180px;
-    padding-top: 42px; margin-left: 150px;
+    width: 216px;
+    height: 216px;
+    padding-top: 212px; margin-left: 46px;
   }
 </style>
 <style>
@@ -223,5 +220,8 @@ export default {
 }
 .el-button {
   font-size: 1em;
+}
+.el-dialog__header {
+  padding: 0;
 }
 </style>
